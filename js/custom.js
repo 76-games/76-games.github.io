@@ -19,25 +19,20 @@ function search_animal() {
   }
 }
 
-// Google tag (gtag.js) code
-(function() {
-  const script = document.createElement('script');
-  script.async = true;
-  script.src = 'https://www.googletagmanager.com/gtag/js?id=G-5Q28Z4RCKL';
-  document.head.appendChild(script);
+// Google tag (gtag.js) code - REPLACED
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-L8WHNC2F7G"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
 
-  script.onload = function() {
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){ dataLayer.push(arguments); }
-    gtag('js', new Date());
-    gtag('config', 'G-5Q28Z4RCKL');
-  };
-})();
+  gtag('config', 'G-L8WHNC2F7G');
+</script>
 
- // Function to detect if it's a mobile device
-    function isMobileDevice() {
-        return window.matchMedia("(max-width: 767px)").matches || /Mobi|Android/i.test(navigator.userAgent);
-    }
+// Function to detect if it's a mobile device
+function isMobileDevice() {
+    return window.matchMedia("(max-width: 767px)").matches || /Mobi|Android/i.test(navigator.userAgent);
+}
 
 // PWA Code with Analytics Tracking
 $(window).on('load', function () {
