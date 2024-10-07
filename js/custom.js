@@ -19,15 +19,20 @@ function search_animal() {
   }
 }
 
-// Google tag (gtag.js) code - REPLACED
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-L8WHNC2F7G"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
+(function() {
+  const script = document.createElement('script');
+  script.async = true;
+  script.src = 'https://www.googletagmanager.com/gtag/js?id=G-L8WHNC2F7G';
+  document.head.appendChild(script);
 
-  gtag('config', 'G-L8WHNC2F7G');
-</script>
+  script.onload = function() {
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){ dataLayer.push(arguments); }
+    gtag('js', new Date());
+    gtag('config', 'G-L8WHNC2F7G');
+  };
+})();
+
 
 // Function to detect if it's a mobile device
 function isMobileDevice() {
