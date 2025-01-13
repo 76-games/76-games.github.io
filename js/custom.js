@@ -41,16 +41,15 @@ function isMobileDevice() {
 
 // PWA Code with Analytics Tracking
 $(window).on('load', function () {
-    // Dynamically add the manifest link with scope
+    // Dynamically add the manifest link with site-wide scope
     const manifestLink = document.createElement('link');
     manifestLink.rel = 'manifest';
     manifestLink.href = '/manifest.json';
-    manifestLink.setAttribute('scope', '/');
     document.head.appendChild(manifestLink);
 
-    // Register Service Worker
+    // Register Service Worker with root scope
     if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.register('/service-worker.js')
+        navigator.serviceWorker.register('/service-worker.js', { scope: '/' })
             .then(function(registration) {
                 console.log('ServiceWorker registration successful with scope: ', registration.scope);
             }).catch(function(error) {
