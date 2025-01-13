@@ -41,11 +41,22 @@ function isMobileDevice() {
 
 // PWA Code with Analytics Tracking
 $(window).on('load', function () {
-    // Dynamically add the manifest link
+    // Dynamically add the manifest link with scope
     const manifestLink = document.createElement('link');
     manifestLink.rel = 'manifest';
-    manifestLink.href = 'https://76-games.gitlab.io/manifest.json';
+    manifestLink.href = '/manifest.json';
+    manifestLink.setAttribute('scope', '/');
     document.head.appendChild(manifestLink);
+
+    // Register Service Worker
+    if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('/service-worker.js')
+            .then(function(registration) {
+                console.log('ServiceWorker registration successful with scope: ', registration.scope);
+            }).catch(function(error) {
+                console.log('ServiceWorker registration failed: ', error);
+            });
+    }
 
     let deferredPrompt;
     const isPwaInstalled = localStorage.getItem('pwaInstalled');
