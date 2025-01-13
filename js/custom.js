@@ -44,7 +44,7 @@ $(window).on('load', function () {
     // Dynamically add the manifest link
     const manifestLink = document.createElement('link');
     manifestLink.rel = 'manifest';
-    manifestLink.href = 'https://66ez.gitlab.io/manifest.json';
+    manifestLink.href = 'https://76-games.gitlab.io/manifest.json';
     document.head.appendChild(manifestLink);
 
     // PWA Installation Code
