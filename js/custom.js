@@ -90,6 +90,7 @@ $(window).on('load', function () {
                 deferredPrompt.prompt();
                 deferredPrompt.userChoice.then((choiceResult) => {
                     if (choiceResult.outcome === 'accepted') {
+                        localStorage.setItem('pwaInstalled', 'true');
                         gtag('event', 'pwa_installed', {
                           'event_category': 'PWA',
                           'event_label': 'PWA Installed'
@@ -106,6 +107,11 @@ $(window).on('load', function () {
               'event_category': 'PWA',
               'event_label': 'PWA Popup Closed'
             });
+        });
+
+        window.addEventListener('appinstalled', () => {
+            localStorage.setItem('pwaInstalled', 'true');
+            console.log('PWA installed');
         });
     }
 });
