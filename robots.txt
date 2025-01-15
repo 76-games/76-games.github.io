@@ -8,4 +8,4 @@ Allow: /
 Allow: /pagead/js/adsense/
 
 # Sitemap
-Sitemap: https://66-ez.github.io/sitemap.xml
+Sitemap: https://76-games.github.io/sitemap.xml
