@@ -168,8 +168,8 @@ ul.user-links li {
   flex-wrap: wrap;
 }
 .grid-2 .game-item:hover, .grid-3 .game-item:hover, .list-vertical:hover {
-  background: rgba(255, 255, 255, 0.1);
-  border-radius: 20px;
+ 
+  border-radius: 15px;
 }
 .list-game {
   width: 100%;
