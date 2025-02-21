@@ -57,20 +57,24 @@ $(window).on('load', function () {
             });
     }
 
+    // Function to initialize PWA install prompt
+function initializePWA() {
     let deferredPrompt;
 
-    // Check if PWA is already installed
     if (!window.matchMedia('(display-mode: standalone)').matches && !isMobileDevice() && !localStorage.getItem('pwaInstalled')) {
-        const popupHTML = `
-            <div id="pwa-popup" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255,255,255,0.8); color: #333; text-align: center; z-index: 1000; display: flex; align-items: center; justify-content: center;">
-                <div style="padding: 25px; background: #f5f5f5; border-radius: 20px; width: 90%; max-width: 450px; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2); text-align: center;">
-                    <h2 style="font-size: 22px; margin-bottom: 15px; color: #2c3e50;">Install Our App for a Faster, Seamless Experience!</h2>
-                    <button id="install-button" style="padding: 12px 28px; font-size: 18px; cursor: pointer; background: #7f2525; color: white; border: none; border-radius: 30px;">Add to Home Screen</button>
-                    <button id="close-popup" style="padding: 12px 28px; font-size: 18px; cursor: pointer; background-color: transparent; color: #888; border: none; border-radius: 30px;">Not Now</button>
+        if (!document.getElementById('pwa-popup')) { 
+            // Prevent duplicate popups
+            const popupHTML = `
+                <div id="pwa-popup" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255,255,255,0.8); color: #333; text-align: center; z-index: 1000; display: flex; align-items: center; justify-content: center;">
+                    <div style="padding: 25px; background: #f5f5f5; border-radius: 20px; width: 90%; max-width: 450px; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2); text-align: center;">
+                        <h2 style="font-size: 22px; margin-bottom: 15px; color: #2c3e50;">Install Our App for a Faster, Seamless Experience!</h2>
+                        <button id="install-button" style="padding: 12px 28px; font-size: 18px; cursor: pointer; background: #7f2525; color: white; border: none; border-radius: 30px;">Add to Home Screen</button>
+                        <button id="close-popup" style="padding: 12px 28px; font-size: 18px; cursor: pointer; background-color: transparent; color: #888; border: none; border-radius: 30px;">Not Now</button>
+                    </div>
                 </div>
-            </div>
-        `;
-        $('body').append(popupHTML);
+            `;
+            $('body').append(popupHTML);
+        }
 
         const popup = document.getElementById('pwa-popup');
         const installButton = document.getElementById('install-button');
@@ -103,4 +107,20 @@ $(window).on('load', function () {
             console.log('PWA installed');
         });
     }
+}
+
+// Run this function on every page load
+$(document).ready(function () {
+    // Register Service Worker
+    if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('/js/service-worker.js', { scope: '/' })
+            .then(function (registration) {
+                console.log('ServiceWorker registration successful with scope: ', registration.scope);
+            }).catch(function (error) {
+                console.log('ServiceWorker registration failed: ', error);
+            });
+    }
+
+    // Initialize the PWA install prompt on all pages
+    initializePWA();
 });
