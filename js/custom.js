@@ -44,12 +44,12 @@ $(window).on('load', function () {
     // Dynamically add the manifest link with site-wide scope
     const manifestLink = document.createElement('link');
     manifestLink.rel = 'manifest';
-    manifestLink.href = '/manifest.json';
+    manifestLink.href = '/js/manifest.json';
     document.head.appendChild(manifestLink);
 
     // Register Service Worker with root scope
     if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.register('/service-worker.js', { scope: '/' })
+        navigator.serviceWorker.register('/js/service-worker.js', { scope: '/' })
             .then(function(registration) {
                 console.log('ServiceWorker registration successful with scope: ', registration.scope);
             }).catch(function(error) {
