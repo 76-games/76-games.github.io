@@ -97,20 +97,19 @@ function search_animal() {
   };
 })();
 
-// Function to detect if it's a mobile device
+// Detect mobile (unchanged)
 function isMobileDevice() {
     return window.matchMedia("(max-width: 767px)").matches || /Mobi|Android/i.test(navigator.userAgent);
 }
 
-// PWA Code with Analytics Tracking
 $(window).on('load', function () {
-    // Dynamically add the manifest link with site-wide scope
+    // Add manifest (from root!)
     const manifestLink = document.createElement('link');
     manifestLink.rel = 'manifest';
-    manifestLink.href = '/js/manifest.json';
+    manifestLink.href = '/manifest.json';
     document.head.appendChild(manifestLink);
 
-    // Register Service Worker with root scope
+    // Register Service Worker (root scope)
     if ('serviceWorker' in navigator) {
         navigator.serviceWorker.register('/js/service-worker.js', { scope: '/' })
             .then(function(registration) {
@@ -122,10 +121,9 @@ $(window).on('load', function () {
 
     let deferredPrompt;
 
-    // Check if PWA is already installed
     if (!window.matchMedia('(display-mode: standalone)').matches && !isMobileDevice() && !localStorage.getItem('pwaInstalled')) {
         const popupHTML = `
-            <div id="pwa-popup" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255,255,255,0.8); color: #333; text-align: center; z-index: 1000; display: flex; align-items: center; justify-content: center;">
+            <div id="pwa-popup" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255,255,255,0.8); color: #333; text-align: center; z-index: 1000; display: none; align-items: center; justify-content: center;">
                 <div style="padding: 25px; background: #f5f5f5; border-radius: 20px; width: 90%; max-width: 450px; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2); text-align: center;">
                     <h2 style="font-size: 22px; margin-bottom: 15px; color: #2c3e50;">Install Our App for a Faster, Seamless Experience!</h2>
                     <button id="install-button" style="padding: 12px 28px; font-size: 18px; cursor: pointer; background: #7f2525; color: white; border: none; border-radius: 30px;">Add to Home Screen</button>
@@ -140,6 +138,7 @@ $(window).on('load', function () {
         const closePopupButton = document.getElementById('close-popup');
 
         window.addEventListener('beforeinstallprompt', (e) => {
+            console.log('beforeinstallprompt fired');
             e.preventDefault();
             deferredPrompt = e;
             popup.style.display = 'flex';
@@ -167,3 +166,4 @@ $(window).on('load', function () {
         });
     }
 });
+
