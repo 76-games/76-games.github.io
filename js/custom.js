@@ -167,3 +167,21 @@ $(window).on('load', function () {
     }
 });
 
+
+// Create the ad container div
+const adDiv = document.createElement('div');
+adDiv.className = 'futureads';
+adDiv.setAttribute('data-ad-slot', 'pw_47383');
+document.body.appendChild(adDiv); // or use a specific container instead of body
+
+// Create the script tag for ad initialization
+const adScript = document.createElement('script');
+adScript.type = 'text/javascript';
+adScript.textContent = `
+  (wapTag.Init = window.wapTag.Init || []).push(function () {
+    wAPITag.display("pw_47383");
+  });
+`;
+document.body.appendChild(adScript); // append after the ad container
+
+
