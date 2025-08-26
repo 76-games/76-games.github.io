@@ -1,32 +1,86 @@
-// Create and insert the async Funding Choices script
-const fundingScript = document.createElement('script');
-fundingScript.async = true;
-fundingScript.src = "https://fundingchoicesmessages.google.com/i/pub-9427048641572074?ers=1";
-fundingScript.setAttribute("nonce", "7M3TLdpr6ws84KtZqprB7Q");
-document.head.appendChild(fundingScript);
+// ===== GPT dynamic loader + auto-slotter =====
+(function () {
+  // 1) Load GPT once
+  window.googletag = window.googletag || { cmd: [] };
+  (function loadGPT() {
+    if (document.getElementById("gpt-lib")) return;
+    var s = document.createElement("script");
+    s.async = true;
+    s.src = "https://securepubads.g.doubleclick.net/tag/js/gpt.js";
+    s.crossOrigin = "anonymous";
+    s.id = "gpt-lib";
+    document.head.appendChild(s);
+  })();
 
-// Create and insert the inline script
-const inlineScript = document.createElement('script');
-inlineScript.setAttribute("nonce", "7M3TLdpr6ws84KtZqprB7Q");
-inlineScript.textContent = `
-(function() {
-  function signalGooglefcPresent() {
-    if (!window.frames['googlefcPresent']) {
-      if (document.body) {
-        const iframe = document.createElement('iframe');
-        iframe.style = 'width: 0; height: 0; border: none; z-index: -1000; left: -1000px; top: -1000px;';
-        iframe.style.display = 'none';
-        iframe.name = 'googlefcPresent';
-        document.body.appendChild(iframe);
-      } else {
-        setTimeout(signalGooglefcPresent, 0);
-      }
-    }
+  // 2) Helpers
+  function parseSizes(str) {
+    // "728x90,320x50" -> [[728,90],[320,50]]
+    return (str || "")
+      .split(",")
+      .map(x => x.trim())
+      .filter(Boolean)
+      .map(x => x.split("x").map(n => parseInt(n, 10)));
   }
-  signalGooglefcPresent();
+
+  // 3) Define & display all placeholders found on the page
+  function initSlots() {
+    var nodes = document.querySelectorAll("[data-gpt-adunit]");
+    if (!nodes.length) return;
+
+    googletag.cmd.push(function () {
+      var pubads = googletag.pubads();
+      pubads.collapseEmptyDivs();
+      pubads.enableSingleRequest();
+
+      nodes.forEach(function (el) {
+        var id = el.id || ("gpt-" + Math.random().toString(36).slice(2));
+        el.id = id;
+
+        var adUnitPath = el.getAttribute("data-gpt-adunit"); // e.g. '/21849154601,23079347111/Ad.Plus-728x90'
+        var sizes = parseSizes(el.getAttribute("data-gpt-sizes")); // e.g. '728x90'
+
+        // Avoid duplicate define
+        if (el.dataset.gptDefined === "1") return;
+
+        var slot = googletag.defineSlot(adUnitPath, sizes, id);
+        if (!slot) return;
+
+        slot.addService(pubads);
+        el.dataset.gptDefined = "1";
+      });
+
+      googletag.enableServices();
+
+      // Lazy display when visible (saves calls)
+      if ("IntersectionObserver" in window) {
+        var io = new IntersectionObserver(function (entries, obs) {
+          entries.forEach(function (entry) {
+            if (entry.isIntersecting) {
+              googletag.display(entry.target.id);
+              obs.unobserve(entry.target);
+            }
+          });
+        }, { rootMargin: "200px 0px" });
+        nodes.forEach(function (el) { io.observe(el); });
+      } else {
+        nodes.forEach(function (el) { googletag.display(el.id); });
+      }
+    });
+  }
+
+  // 4) Run now and on DOM changes (so it also works on SPA content)
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", initSlots);
+  } else {
+    initSlots();
+  }
+
+  // Observe future DOM additions (optional but nice for dynamic pages)
+  if ("MutationObserver" in window) {
+    var mo = new MutationObserver(function () { initSlots(); });
+    mo.observe(document.documentElement, { childList: true, subtree: true });
+  }
 })();
-`;
-document.head.appendChild(inlineScript);
 
 
 
