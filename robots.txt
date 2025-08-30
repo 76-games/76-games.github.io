@@ -4,6 +4,9 @@ Disallow:
 User-agent: Googlebot
 Allow: /
 
+User-agent: Bingbot
+Allow: /
+
 # Allow AdSense-related resources
 Allow: /pagead/js/adsense/
 
